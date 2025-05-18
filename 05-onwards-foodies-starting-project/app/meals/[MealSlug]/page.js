@@ -3,10 +3,20 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+export async function generateMetadata({ params }) {
+  const meal = getMeal(params.mealSlug);
+
+  if (!meal) notFound();
+
+  return {
+    title: meal.title,
+    description: meal.summary,
+  };
+}
 export default function MealDetails({ params }) {
   const meal = getMeal(params.mealSlug);
 
-  if(!meal) notFound();
+  if (!meal) notFound();
 
   meal.instructions = meal.instructions.replace(/\n/g, "<br />");
 
@@ -14,7 +24,7 @@ export default function MealDetails({ params }) {
     <>
       <header className={styles.header}>
         <div className={styles.image}>
-          <Image src={meal.image} fill />
+          <Image src={meal.image} fill alt="meal image" />
         </div>
         <div className={styles.headerText}>
           <h1>{meal.title}</h1>
